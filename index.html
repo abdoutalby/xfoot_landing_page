@@ -2531,32 +2531,36 @@
         }
 
         function handleContactSubmit(event) {
-            event.preventDefault();
-            
-            const form = document.getElementById('contactForm');
-            const messageDiv = document.getElementById('contactMessage');
-            
-            // Get form data
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData);
-            
-            // Show success message
-            const successMessage = currentLanguage === 'en' ? 
-                "Thank you for your message! We'll get back to you as soon as possible." :
-                currentLanguage === 'fr' ?
-                "Merci pour votre message ! Nous vous répondrons dès que possible." :
-                "شكرًا على رسالتك! سنعود إليك في أقرب وقت ممكن.";
-                
-            messageDiv.innerHTML = `<div class="success-message"><p style="font-weight: 600; margin: 0;">${successMessage}</p></div>`;
-            
-            // Reset form
-            form.reset();
-            
-            // Hide message after 3 seconds
-            setTimeout(() => {
-                messageDiv.innerHTML = '';
-            }, 3000);
-        }
+    event.preventDefault();
+    
+    const form = document.getElementById('contactForm');
+    const messageDiv = document.getElementById('contactMessage');
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+    
+    // Create mailto link
+    const subject = encodeURIComponent(data.subject);
+    const body = encodeURIComponent(`Name: ${data.name}\nEmail: ${data.email}\n\nMessage:\n${data.message}`);
+    const mailtoLink = `mailto:aberrahmentalby@gmail.com?subject=${subject}&body=${body}`;
+    
+    // Open email client
+    window.location.href = mailtoLink;
+    
+    // Show success message
+    const successMessage = currentLanguage === 'en' ? 
+        "Your email client has been opened. Please send the pre-filled email to contact us." :
+        currentLanguage === 'fr' ?
+        "Votre client de messagerie a été ouvert. Veuillez envoyer l'email pré-rempli pour nous contacter." :
+        "تم فتح عميل البريد الإلكتروني الخاص بك. يرجى إرسال البريد الإلكتروني المملوء مسبقًا للاتصال بنا.";
+        
+    messageDiv.innerHTML = `<div class="success-message"><p style="font-weight: 600; margin: 0;">${successMessage}</p></div>`;
+    form.reset();
+    
+    // Hide message after 5 seconds
+    setTimeout(() => {
+        messageDiv.innerHTML = '';
+    }, 5000);
+}
 
         function toggleMobileMenu() {
             const mobileMenu = document.getElementById('mobile-menu');
